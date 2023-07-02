@@ -9,7 +9,7 @@ public class TicketOnlineApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TicketOnlineApplication.class, args);
 		
-		
+	 System.out.println("AAAAA");
 	}
 
 }
