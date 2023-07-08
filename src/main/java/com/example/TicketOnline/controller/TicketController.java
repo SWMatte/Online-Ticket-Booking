@@ -30,8 +30,14 @@ public class TicketController {
 
 	@PostMapping("/ticket")
 	public void addElement(@RequestBody Ticket ticket) {
+		try {
 
-		ticketService.add(ticket);
+			ticketService.add(ticket);
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+
+		}
 	}
 
 	@DeleteMapping("/ticket/{id}")
@@ -43,8 +49,13 @@ public class TicketController {
 	
 	@PutMapping("/ticket")
 	public void updateElement(@RequestBody Ticket   ticket) {
+		try {
+			ticketService.update(ticket);
 
-		ticketService.update(ticket);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+
+		}
 	}
 	
 }

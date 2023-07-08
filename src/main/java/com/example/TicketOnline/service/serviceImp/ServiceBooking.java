@@ -16,7 +16,7 @@ public class ServiceBooking implements IService<Booking> {
 	BookingRepository bookingRepository;
 	
 	@Override
-	public void add(Booking element) {
+	public void add(Booking element) throws Exception {
 		 
 		bookingRepository.save(element);
 	}
@@ -28,7 +28,7 @@ public class ServiceBooking implements IService<Booking> {
 	}
 
 	@Override
-	public void update(Booking element) {
+	public void update(Booking element) throws Exception {
 		 
 
 	}

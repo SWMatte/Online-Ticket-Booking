@@ -18,7 +18,7 @@ public class ServiceMovie  implements IService<Movie>{
 	
 	
 	@Override
-	public void add(Movie element) {
+	public void add(Movie element) throws Exception  {
 		movieRepository.save(element);		
 	}
 
@@ -28,15 +28,13 @@ public class ServiceMovie  implements IService<Movie>{
 	}
 
 	@Override
-	public void update(Movie element) {
-		// TODO Auto-generated method stub
-		
+	public void update(Movie element) throws Exception {
+		movieRepository.updateMovie(element.getTitleMovie(),element.getDurationMovie(),element.getReleaseMovie(),element.isAvailable(), element.getIdMovie());
 	}
 
 	@Override
 	public List<Movie> getAll() {
-		// TODO Auto-generated method stub
-		return movieRepository.findAll();
+ 		return movieRepository.findAll();
 	}
 
 }

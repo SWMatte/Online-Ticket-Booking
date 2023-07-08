@@ -1,9 +1,11 @@
 package com.example.TicketOnline.Entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
-import org.hibernate.annotations.OnDelete;
+
+ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,8 +26,11 @@ public class Ticket {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idTicket;
 	private double price;
-  	private Date TimeMovie;
-	private String StateTicket;
+
+
+	private LocalTime timeMovie;
+
+	private String stateTicket;
 	
 	
 	@ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST},fetch = FetchType.EAGER)
@@ -62,26 +67,21 @@ public class Ticket {
 		this.price = price;
 	}
 
-
-	public Date getTimeMovie() {
-		return TimeMovie;
+	public LocalTime getTimeMovie() {
+		return timeMovie;
 	}
 
-
-	public void setTimeMovie(Date timeMovie) {
-		TimeMovie = timeMovie;
+	public void setTimeMovie(LocalTime timeMovie) {
+		this.timeMovie = timeMovie;
 	}
-
 
 	public String getStateTicket() {
-		return StateTicket;
+		return stateTicket;
 	}
-
 
 	public void setStateTicket(String stateTicket) {
-		StateTicket = stateTicket;
+		this.stateTicket = stateTicket;
 	}
-
 
 	public Movie getMovies() {
 		return movies;

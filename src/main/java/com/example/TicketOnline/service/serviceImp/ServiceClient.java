@@ -17,7 +17,7 @@ public class ServiceClient implements IService<Client> {
 	ClientRepository clientRepository;
 	
 	@Override
-	public void add(Client element) {
+	public void add(Client element) throws Exception{
 		clientRepository.save(element);	
 	}
 
@@ -27,8 +27,8 @@ public class ServiceClient implements IService<Client> {
 	}
 
 	@Override
-	public void update(Client element) {
-		// TODO Auto-generated method stub
+	public void update(Client element) throws Exception {
+		clientRepository.updateClient(element.getName(), element.getLastName(), element.getIdClient());
 		
 	}
 

@@ -23,15 +23,20 @@ public class ClientController {
 
 	@GetMapping("/client")
 	public List<Client> findAll() {
-
 		return clientService.getAll();
 	}
 	
 
 	@PostMapping("/client")
 	public void addElement(@RequestBody Client client) {
+		try {
+			clientService.add(client);
 
-		clientService.add(client);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+
+		}
+
 	}
 
 	@DeleteMapping("/client/{id}")
@@ -43,8 +48,13 @@ public class ClientController {
 	
 	@PutMapping("/client")
 	public void updateElement(@RequestBody Client client) {
+		try {
+			clientService.update(client);
 
-		clientService.update(client);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+
+		}
 	}
 	
 }

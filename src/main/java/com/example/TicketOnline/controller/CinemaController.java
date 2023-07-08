@@ -18,33 +18,40 @@ import com.example.TicketOnline.service.IService;
 @RestController
 public class CinemaController {
 
-	@Autowired
-	IService<Cinema> cinemaService;
+    @Autowired
+    IService<Cinema> cinemaService;
 
-	@GetMapping("/cinema")
-	public List<Cinema> findAll() {
+    @GetMapping("/cinema")
+    public List<Cinema> findAll() {
 
-		return cinemaService.getAll();
-	}
-	
+        return cinemaService.getAll();
+    }
 
-	@PostMapping("/cinema")
-	public void addElement(@RequestBody Cinema cinema) {
+    @PostMapping("/cinema")
+    public void addElement(@RequestBody Cinema cinema) {
+        try {
+            cinemaService.add(cinema);
+        } catch (Exception e) {
+            System.out.printf(e.getMessage());
+        }
+    }
 
-		cinemaService.add(cinema);
-	}
+    @DeleteMapping("/cinema/{id}")
+    public void deleteElement(@PathVariable int id) {
 
-	@DeleteMapping("/cinema/{id}")
-	public void deleteElement(@PathVariable int id) {
+        cinemaService.remove(id);
+    }
 
-		cinemaService.remove(id);
-	}
-	
-	
-	@PutMapping("/cinema")
-	public void updateElement(@RequestBody Cinema cinema) {
 
-		cinemaService.update(cinema);
-	}
-	
+    @PutMapping("/cinema")
+    public void updateElement(@RequestBody Cinema cinema) {
+
+        try {
+            cinemaService.update(cinema);
+        } catch (Exception e) {
+            System.out.printf(e.getMessage());
+        }
+    }
+
+
 }

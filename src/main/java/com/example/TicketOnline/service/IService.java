@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface IService <T>{		  
 	
-	public void add(T element);
+	public void add(T element) throws Exception;
 
 	public void remove(int id);
 	
-	public void update(T element);
+	public void update(T element) throws Exception;
 	
 	 public List<T> getAll(); 
  

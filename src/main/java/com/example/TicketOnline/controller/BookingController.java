@@ -29,8 +29,14 @@ public class BookingController {
 
 	@PostMapping("/booking")
 	public void addElement(@RequestBody Booking booking) {
+		try {
+			bookingService.add(booking);
 
-		bookingService.add(booking);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+
+		}
+
 	}
 
 	@DeleteMapping("/booking/{id}")
@@ -42,8 +48,13 @@ public class BookingController {
 	
 	@PutMapping("/booking")
 	public void updateElement(@RequestBody Booking booking) {
+		try {
+			bookingService.update(booking);
 
-		bookingService.update(booking);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+
+		}
 	}
 	
 }
