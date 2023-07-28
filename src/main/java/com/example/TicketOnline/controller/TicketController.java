@@ -2,6 +2,8 @@ package com.example.TicketOnline.controller;
 
 import java.util.List;
 
+import com.example.TicketOnline.DTO.TickeDTO;
+import com.example.TicketOnline.service.serviceImp.ServiceTicket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,9 @@ public class TicketController {
 	@Autowired
 	IService<Ticket> ticketService;
 
+	@Autowired
+	ServiceTicket serviceTicket;
+
 	@GetMapping("/ticket")
 	public List<Ticket> findAll() {
 
@@ -28,15 +33,16 @@ public class TicketController {
 	
 
 	@PostMapping("/ticket")
-	public void addElement(@RequestBody Ticket ticket) {
+	public TickeDTO addElement(@RequestBody Ticket ticket) {
 		try {
 
-			ticketService.add(ticket);
+			return serviceTicket.addTicketDTO(ticket);
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 
 		}
+		return null;
 	}
 
 	@DeleteMapping("/ticket/{id}")

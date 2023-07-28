@@ -1,11 +1,9 @@
 package com.example.TicketOnline.service.serviceImp;
 
 import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
 
+import com.example.TicketOnline.DTO.TickeDTO;
 import com.example.TicketOnline.Entities.Cinema;
 import com.example.TicketOnline.Entities.Client;
 import com.example.TicketOnline.Entities.Movie;
@@ -33,13 +31,14 @@ public class ServiceTicket implements IService<Ticket> {
     @Autowired
     MovieRepository movieRepository;
 
-    @Override
-    public void add(Ticket element) throws Exception {
+
+    public TickeDTO addTicketDTO(Ticket element){
         Client c = clientRepository.findById(element.getClients().getIdClient()).get();
         Movie m = movieRepository.findById(element.getMovies().getIdMovie()).get();
         Cinema cinema = cinemaRepository.findById(element.getCinema().getIdCinema()).get();
         int newSeatAvailable = cinema.getSeatAvailable() - element.getQtaTicket();
 
+        TickeDTO ticket=null;
         if (c != null && m != null && cinema != null && element.getQtaTicket() > 0) {
 
             if (element.getTimeMovie().isAfter(m.getReleaseMovie()) || element.getTimeMovie().isEqual(m.getReleaseMovie()) && m.isAvailable()) {
@@ -61,6 +60,9 @@ public class ServiceTicket implements IService<Ticket> {
 
                     ticketRepository.save(t);
                     cinemaRepository.updateCinemaById(newSeatAvailable, element.getCinema().getIdCinema());
+
+                    ticket= new TickeDTO(element.getPrice(),element.getTimeMovie(),element.getStateTicket(),element.getQtaTicket(),m,c,cinema,element.getQtaTicket()*element.getPrice());
+
                 } else {
                     System.out.println("Capienza posti superata");
                 }
@@ -71,7 +73,52 @@ public class ServiceTicket implements IService<Ticket> {
         } else {
             new Exception();
         }
+
+        return ticket;
     }
+
+
+
+// substitute of the above method
+    @Override
+        public void add(Ticket element) throws Exception {
+            Client c = clientRepository.findById(element.getClients().getIdClient()).get();
+            Movie m = movieRepository.findById(element.getMovies().getIdMovie()).get();
+            Cinema cinema = cinemaRepository.findById(element.getCinema().getIdCinema()).get();
+            int newSeatAvailable = cinema.getSeatAvailable() - element.getQtaTicket();
+            if (c != null && m != null && cinema != null && element.getQtaTicket() > 0) {
+
+                if (element.getTimeMovie().isAfter(m.getReleaseMovie()) || element.getTimeMovie().isEqual(m.getReleaseMovie()) && m.isAvailable()) {
+
+
+                    if (cinema.getSeatAvailable() >= element.getQtaTicket()) {
+
+                        Ticket t = new Ticket();
+                        LocalDate timeMovie = element.getTimeMovie();
+
+                        t.setPrice(element.getPrice());
+                        t.setTimeMovie(timeMovie);
+                        t.setStateTicket(element.getStateTicket());
+                        t.setQtaTicket(element.getQtaTicket());
+                        t.setMovies(m);
+                        t.setClients(c);
+                        t.setCinema(cinema);
+
+
+                        ticketRepository.save(t);
+                        cinemaRepository.updateCinemaById(newSeatAvailable, element.getCinema().getIdCinema());
+                    } else {
+                        System.out.println("Capienza posti superata");
+                    }
+                } else {
+                    System.out.println("il film non è ancora uscito");
+                }
+
+            } else {
+                new Exception();
+            }
+
+        }
 
     @Override
     public void remove(int id) {
@@ -97,5 +144,7 @@ public class ServiceTicket implements IService<Ticket> {
     public List<Ticket> getAll() {
         return ticketRepository.findAll();
     }
+
+
 
 }
