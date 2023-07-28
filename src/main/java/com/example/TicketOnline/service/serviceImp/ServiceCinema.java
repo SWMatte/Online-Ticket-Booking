@@ -18,22 +18,17 @@ public class ServiceCinema implements IService<Cinema> {
     @Autowired
     CinemaRepository cinemaRepository;
 
-    @Autowired
-    MovieRepository movieRepository;
+
 
     @Override
     public void add(Cinema element) throws Exception {
+       if(cinemaRepository.findByCity(element.getCity())==null){
 
-        Movie m = movieRepository.findById(element.getMovies().getIdMovie()).get();
-        if (m != null) {
-            Cinema c = new Cinema();
-            c.setCity(element.getCity());
-            c.setSeatAvailable(element.getSeatAvailable());
-            c.setMovies(m);
-            cinemaRepository.save(c);
-        } else {
-            new Exception("Film not available");
-        }
+            cinemaRepository.save(element);
+       } else{
+           System.out.println("Cinema gia esistente");
+       }
+
 
     }
 
@@ -45,14 +40,8 @@ public class ServiceCinema implements IService<Cinema> {
     @Override
     public void update(Cinema element) throws Exception {
 
-        Movie m = movieRepository.findById(element.getMovies().getIdMovie()).get();
-        if (m != null) {
+            cinemaRepository.updateCinema(element.getCity(), element.getSeatAvailable(), element.getIdCinema());
 
-            cinemaRepository.updateCinema(element.getCity(), element.getSeatAvailable(), m, element.getIdCinema());
-        } else {
-            new Exception("Film not available");
-
-        }
     }
 
     @Override

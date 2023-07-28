@@ -29,11 +29,7 @@ public class Client {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	 private List<Ticket> tickets;
 
-		@JsonIgnore
-		  @OneToMany(mappedBy = "client",cascade = {CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST})
-		@OnDelete(action = OnDeleteAction.CASCADE)
-		 private List<Booking> bookings;
-		 
+
 	 
 
 	 public int getIdClient() {
@@ -92,16 +88,7 @@ public class Client {
 
 
 
-	public List<Booking> getBookings() {
-		return bookings;
-	}
 
-
-
-
-	public void setBookings(List<Booking> bookings) {
-		this.bookings = bookings;
-	}
 
 
 

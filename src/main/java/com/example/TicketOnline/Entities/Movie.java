@@ -1,5 +1,6 @@
 package com.example.TicketOnline.Entities;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.hibernate.annotations.OnDelete;
@@ -25,21 +26,15 @@ public class Movie {
 	private int idMovie;
 	private String titleMovie;
 	private String durationMovie;
-	private String releaseMovie;
+	private LocalDate releaseMovie;
 	private boolean available;
-
-
-
 	
 	 @JsonIgnore
 	  @OneToMany(mappedBy = "movies",cascade = {CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST})
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	 private List<Ticket> tickets;
 	 
-	 @JsonIgnore
-	  @OneToMany(mappedBy = "movies",cascade = {CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST})
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	 private List<Cinema> cinema;
+
 
 	public int getIdMovie() {
 		return idMovie;
@@ -65,11 +60,12 @@ public class Movie {
 		this.durationMovie = durationMovie;
 	}
 
-	public String getReleaseMovie() {
+
+	public LocalDate getReleaseMovie() {
 		return releaseMovie;
 	}
 
-	public void setReleaseMovie(String releaseMovie) {
+	public void setReleaseMovie(LocalDate releaseMovie) {
 		this.releaseMovie = releaseMovie;
 	}
 
@@ -89,13 +85,7 @@ public class Movie {
 		this.tickets = tickets;
 	}
 
-	public List<Cinema> getCinema() {
-		return cinema;
-	}
 
-	public void setCinema(List<Cinema> cinema) {
-		this.cinema = cinema;
-	}
 
 
 }

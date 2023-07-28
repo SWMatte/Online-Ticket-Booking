@@ -1,13 +1,9 @@
 package com.example.TicketOnline.Entities;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Cinema {
@@ -18,10 +14,11 @@ public class Cinema {
 	private int seatAvailable;
 
 	
-	@ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST},fetch = FetchType.EAGER)
-	 @JoinColumn(name = "idMovie")
-	private Movie movies;
 
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "cinema",cascade = {CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST})
+	private List<Ticket> ticket;
 
 	public int getIdCinema() {
 		return idCinema;
@@ -47,11 +44,12 @@ public class Cinema {
 		this.seatAvailable = seatAvailable;
 	}
 
-	public Movie getMovies() {
-		return movies;
+
+	public List<Ticket> getTicket() {
+		return ticket;
 	}
 
-	public void setMovies(Movie movies) {
-		this.movies = movies;
+	public void setTicket(List<Ticket> ticket) {
+		this.ticket = ticket;
 	}
 }

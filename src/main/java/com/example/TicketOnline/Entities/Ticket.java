@@ -1,5 +1,6 @@
 package com.example.TicketOnline.Entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -28,10 +29,11 @@ public class Ticket {
 	private double price;
 
 
-	private LocalTime timeMovie;
+	private LocalDate timeMovie;
 
 	private String stateTicket;
-	
+
+	private int qtaTicket;
 	
 	@ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST},fetch = FetchType.EAGER)
 	 @JoinColumn(name = "idMovie")
@@ -41,12 +43,17 @@ public class Ticket {
 	 @JoinColumn(name = "idClient")
 	private Client clients;
 
-	
-	 @JsonIgnore
-	  @OneToMany(mappedBy = "ticket",cascade = {CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST})
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	 private List<Booking> bookings;
+	@ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST},fetch = FetchType.EAGER)
+	@JoinColumn(name = "idCinema")
+	private Cinema cinema;
 
+	public int getQtaTicket() {
+		return qtaTicket;
+	}
+
+	public void setQtaTicket(int qtaTicket) {
+		this.qtaTicket = qtaTicket;
+	}
 
 	public int getIdTicket() {
 		return idTicket;
@@ -67,11 +74,11 @@ public class Ticket {
 		this.price = price;
 	}
 
-	public LocalTime getTimeMovie() {
+	public LocalDate getTimeMovie() {
 		return timeMovie;
 	}
 
-	public void setTimeMovie(LocalTime timeMovie) {
+	public void setTimeMovie(LocalDate timeMovie) {
 		this.timeMovie = timeMovie;
 	}
 
@@ -103,17 +110,14 @@ public class Ticket {
 	}
 
 
-	public List<Booking> getBookings() {
-		return bookings;
-	}
 
 
-	public void setBookings(List<Booking> bookings) {
-		this.bookings = bookings;
+
+	public Cinema getCinema() {
+		return cinema;
 	}
-	 
-	 
-	 
-	 
-	 
+
+	public void setCinema(Cinema cinema) {
+		this.cinema = cinema;
+	}
 }

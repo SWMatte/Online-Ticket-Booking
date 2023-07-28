@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.TicketOnline.Entities.Booking;
 import com.example.TicketOnline.Entities.Cinema;
 import com.example.TicketOnline.service.IService;
 

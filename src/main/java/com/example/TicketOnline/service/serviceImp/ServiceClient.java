@@ -18,7 +18,12 @@ public class ServiceClient implements IService<Client> {
 	
 	@Override
 	public void add(Client element) throws Exception{
-		clientRepository.save(element);	
+		if(clientRepository.findByNameAndLastName(element.getName(), element.getLastName())==null) {
+			clientRepository.save(element);
+		}
+		else {
+			System.out.println("persona gia esistente");
+		}
 	}
 
 	@Override
