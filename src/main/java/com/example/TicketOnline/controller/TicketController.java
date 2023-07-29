@@ -3,8 +3,11 @@ package com.example.TicketOnline.controller;
 import java.util.List;
 
 import com.example.TicketOnline.DTO.TickeDTO;
+import com.example.TicketOnline.response.ResponseHandler;
 import com.example.TicketOnline.service.serviceImp.ServiceTicket;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,16 +36,15 @@ public class TicketController {
 	
 
 	@PostMapping("/ticket")
-	public TickeDTO addElement(@RequestBody Ticket ticket) {
+	public ResponseEntity<Object> addElement(@RequestBody Ticket ticket) {
+		TickeDTO a=null;
 		try {
-
-			return serviceTicket.addTicketDTO(ticket);
-
+				a = serviceTicket.addTicketDTO(ticket);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 
 		}
-		return null;
+		return ResponseHandler.generateResponse("AAA", HttpStatus.OK, a);
 	}
 
 	@DeleteMapping("/ticket/{id}")
