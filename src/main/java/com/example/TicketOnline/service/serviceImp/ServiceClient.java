@@ -2,7 +2,7 @@ package com.example.TicketOnline.service.serviceImp;
 
  import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.TicketOnline.Entities.Client;
@@ -11,18 +11,18 @@ import com.example.TicketOnline.service.IService;
 
 
 @Service
-public class ServiceClient implements IService<Client> {
+public class ServiceClient implements IService<Client>  {
 
 	@Autowired
 	ClientRepository clientRepository;
 	
 	@Override
-	public void add(Client element) throws Exception{
+	public void add(Client element) {
 		if(clientRepository.findByNameAndLastName(element.getName(), element.getLastName())==null) {
 			clientRepository.save(element);
 		}
 		else {
-			System.out.println("persona gia esistente");
+			throw new IllegalArgumentException();
 		}
 	}
 
@@ -42,4 +42,10 @@ public class ServiceClient implements IService<Client> {
  		return clientRepository.findAll();
 	}
 
+
+
+	public Client findById(int id) throws Exception {
+		return clientRepository.findById(id).orElseThrow(Exception::new);
+
+	}
 }

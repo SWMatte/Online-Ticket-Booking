@@ -2,6 +2,8 @@ package com.example.TicketOnline.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -17,7 +19,8 @@ public class Cinema {
 
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "cinema",cascade = {CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST})
+	@OneToMany(mappedBy = "cinema")
+	@OnDelete(action = OnDeleteAction.CASCADE )
 	private List<Ticket> ticket;
 
 	public int getIdCinema() {

@@ -2,7 +2,10 @@ package com.example.TicketOnline.controller;
 
 import java.util.List;
 
+import com.example.TicketOnline.response.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,20 +24,26 @@ public class MovieController {
     IService<Movie> movieService;
 
     @GetMapping("/movie")
-    public List<Movie> findAll() {
+    public ResponseEntity<Object> findAll() throws Exception {
 
-        return movieService.getAll();
+        try {
+            return ResponseHandler.generateResponse("Movie add", HttpStatus.OK, movieService.getAll());
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse("Nessun movie presente", HttpStatus.BAD_REQUEST, null);
+        }
     }
 
 
     @PostMapping("/movie")
-    public void addElement(@RequestBody Movie movie) {
+    public ResponseEntity<Object> addElement(@RequestBody Movie movie) {
+
         try {
             movieService.add(movie);
-
+            return ResponseHandler.generateMessage("Movie aggiunto", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseHandler.generateMessage("Movie gia' inserito", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-
+            throw new RuntimeException(e);
         }
     }
 
@@ -46,13 +55,13 @@ public class MovieController {
 
 
     @PutMapping("/movie")
-    public void updateElement(@RequestBody Movie movie) {
+    public ResponseEntity<Object> updateElement(@RequestBody Movie movie) {
+
         try {
             movieService.update(movie);
-
+            return ResponseHandler.generateMessage("Movie add" , HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-
+            return ResponseHandler.generateMessage(e.getMessage() , HttpStatus.BAD_REQUEST);
         }
     }
 

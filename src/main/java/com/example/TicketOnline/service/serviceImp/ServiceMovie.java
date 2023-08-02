@@ -23,7 +23,7 @@ public class ServiceMovie implements IService<Movie> {
             movieRepository.save(element);
 
         } else {
-            System.out.println("Movie gia esistente");
+            throw new IllegalArgumentException();
         }
     }
 

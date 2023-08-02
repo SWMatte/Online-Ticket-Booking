@@ -10,6 +10,6 @@ public interface IService <T>{
 	
 	public void update(T element) throws Exception;
 	
-	 public List<T> getAll(); 
+	 public List<T> getAll() throws Exception;
  
 }

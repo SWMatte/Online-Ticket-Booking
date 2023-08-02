@@ -20,72 +20,79 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Movie {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idMovie;
-	private String titleMovie;
-	private String durationMovie;
-	private LocalDate releaseMovie;
-	private boolean available;
-	
-	 @JsonIgnore
-	  @OneToMany(mappedBy = "movies",cascade = {CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST})
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	 private List<Ticket> tickets;
-	 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idMovie;
+    private String titleMovie;
+    private String durationMovie;
+    private LocalDate releaseMovie;
+    private boolean available;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "movies")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Ticket> tickets;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "movie")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Valutation> valutazioni;
+
+    public int getIdMovie() {
+        return idMovie;
+    }
+
+    public void setIdMovie(int idMovie) {
+        this.idMovie = idMovie;
+    }
+
+    public String getTitleMovie() {
+        return titleMovie;
+    }
+
+    public void setTitleMovie(String titleMovie) {
+        this.titleMovie = titleMovie;
+    }
+
+    public String getDurationMovie() {
+        return durationMovie;
+    }
+
+    public void setDurationMovie(String durationMovie) {
+        this.durationMovie = durationMovie;
+    }
 
 
-	public int getIdMovie() {
-		return idMovie;
-	}
+    public LocalDate getReleaseMovie() {
+        return releaseMovie;
+    }
 
-	public void setIdMovie(int idMovie) {
-		this.idMovie = idMovie;
-	}
+    public void setReleaseMovie(LocalDate releaseMovie) {
+        this.releaseMovie = releaseMovie;
+    }
 
-	public String getTitleMovie() {
-		return titleMovie;
-	}
+    public boolean isAvailable() {
+        return available;
+    }
 
-	public void setTitleMovie(String titleMovie) {
-		this.titleMovie = titleMovie;
-	}
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
 
-	public String getDurationMovie() {
-		return durationMovie;
-	}
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
 
-	public void setDurationMovie(String durationMovie) {
-		this.durationMovie = durationMovie;
-	}
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
 
+    public List<Valutation> getValutazioni() {
+        return valutazioni;
+    }
 
-	public LocalDate getReleaseMovie() {
-		return releaseMovie;
-	}
-
-	public void setReleaseMovie(LocalDate releaseMovie) {
-		this.releaseMovie = releaseMovie;
-	}
-
-	public boolean isAvailable() {
-		return available;
-	}
-
-	public void setAvailable(boolean available) {
-		this.available = available;
-	}
-
-	public List<Ticket> getTickets() {
-		return tickets;
-	}
-
-	public void setTickets(List<Ticket> tickets) {
-		this.tickets = tickets;
-	}
-
-
-
-
+    public void setValutazioni(List<Valutation> valutazioni) {
+        this.valutazioni = valutazioni;
+    }
 }

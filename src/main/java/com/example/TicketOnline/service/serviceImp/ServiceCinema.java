@@ -21,12 +21,12 @@ public class ServiceCinema implements IService<Cinema> {
 
 
     @Override
-    public void add(Cinema element) throws Exception {
+    public void add(Cinema element)  {
        if(cinemaRepository.findByCity(element.getCity())==null){
 
             cinemaRepository.save(element);
        } else{
-           System.out.println("Cinema gia esistente");
+          throw  new IllegalArgumentException();
        }
 
 
@@ -45,8 +45,14 @@ public class ServiceCinema implements IService<Cinema> {
     }
 
     @Override
-    public List<Cinema> getAll() {
-        return cinemaRepository.findAll();
+    public List<Cinema> getAll() throws Exception {
+        if(cinemaRepository.findAll().isEmpty()){
+            throw new Exception();
+        } else{
+
+         return cinemaRepository.findAll();
+        }
+
     }
 
 }

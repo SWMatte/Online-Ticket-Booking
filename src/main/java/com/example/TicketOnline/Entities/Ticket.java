@@ -35,15 +35,15 @@ public class Ticket {
 
 	private int qtaTicket;
 	
-	@ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST},fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	 @JoinColumn(name = "idMovie")
 	private Movie movies;
 	
-	@ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST},fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	 @JoinColumn(name = "idClient")
 	private Client clients;
 
-	@ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST},fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "idCinema")
 	private Cinema cinema;
 
