@@ -34,7 +34,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"price\": 15,\r\n    \"timeMovie\": \"2023-12-07\",\r\n    \"stateTicket\": \"Purchased\",\r\n    \"qtaTicket\":2,\r\n    \"movies\": {\r\n        \"idMovie\": 1\r\n    },\r\n    \"clients\": {\r\n        \"idClient\": 1\r\n    },\r\n    \"cinema\":{\r\n        \"idCinema\":1\r\n    }\r\n}",
+							"raw": "{\r\n    \"price\": 15,\r\n    \"timeMovie\": \"2023-12-07\",\r\n    \"stateTicket\": \"Purchased\",\r\n    \"qtaTicket\": 2,\r\n    \"seat\": [\r\n        {\"idSeat\":1},\r\n        {\"idSeat\":2}\r\n        \r\n    ],\r\n    \"movies\": {\r\n        \"idMovie\": 1\r\n    },\r\n    \"clients\": {\r\n        \"idClient\": 1\r\n    },\r\n    \"cinema\": {\r\n        \"idCinema\": 1\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -56,13 +56,13 @@
 					"response": []
 				},
 				{
-					"name": "UPDATE TICKET",
+					"name": "ADD TICKET DISCOUNT",
 					"request": {
-						"method": "PUT",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"idTicket\":3,\r\n    \"price\": 15,\r\n    \"timeMovie\": \"2023-07-05\",\r\n    \"stateTicket\": \"available\",\r\n    \"movies\": {\r\n        \"idMovie\": 1\r\n    },\r\n    \"clients\": {\r\n        \"idClient\": 1\r\n    }\r\n}",
+							"raw": "{\r\n    \"price\": 15,\r\n    \"timeMovie\": \"2023-12-07\",\r\n    \"stateTicket\": \"Purchased\",\r\n    \"qtaTicket\": 2,\r\n    \"seat\": [\r\n        {\r\n            \"idSeat\": 1\r\n        },\r\n        {\r\n            \"idSeat\": 2\r\n        }\r\n    ],\r\n    \"movies\": {\r\n        \"idMovie\": 1\r\n    },\r\n    \"clients\": {\r\n        \"idClient\": 1\r\n    },\r\n    \"cinema\": {\r\n        \"idCinema\": 1\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -70,34 +70,43 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/ticket",
+							"raw": "http://localhost:8080/ticketDiscount",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"ticket"
+								"ticketDiscount"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "DELETE TICKET",
+					"name": "DELETE SINGLE TICKET",
 					"request": {
-						"method": "DELETE",
+						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/ticket/1",
+							"raw": "http://localhost:8080/removesingleticket?idTicket=1&qtaRimossa=1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"ticket",
-								"1"
+								"removesingleticket"
+							],
+							"query": [
+								{
+									"key": "idTicket",
+									"value": "1"
+								},
+								{
+									"key": "qtaRimossa",
+									"value": "1"
+								}
 							]
 						}
 					},
@@ -128,13 +137,33 @@
 					"response": []
 				},
 				{
+					"name": "GET  CLIENT BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/client/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"client",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "ADD CLIENTS",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Mirko\",\r\n    \"lastName\":\"Francini\"\r\n}",
+							"raw": "{\r\n    \"name\":\"Mirko\",\r\n    \"lastName\":\"Francini\",\r\n    \"age\":22\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -330,11 +359,21 @@
 				{
 					"name": "ADD  CINEMA",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiTWFyY28iLCJpYXQiOjE2ODk5MzY0ODAsInJvbGVzIjoiQURNSU4ifQ.S9RbbBxP5Vk6Aiw--8sHWaOLEm0EDApE-Gccd3yYzO3Jv-SvXMQdzK1rxG4jrE6IseDVHhFMcOs8juSCOoYkgESTgKZIB8lCm2YDEv8kO_Qhf7jQCv4wgVjbensICMBEmj4Y8zsVeAo5bqUrfdHaGYx45prFGvFpvKN-6W8OKc3jfhuVVEKur9iHEKvhdbf6p-8ZyckyeNGrHhXI5PLQi7r8rW5sbNnSdeqXErHEb530RINXpuiYy0VBiiTPLg0rxLo0D8QsrN9U6jF2h7g5KIpFbMK8YjvOBAOPr01wdERU7wPtRKrZa42fpCMP2DQmagXYtHsrR6486HcTjsQsbw",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"city\":\"Milan\",\r\n    \"seatAvailable\":123\r\n    \r\n}",
+							"raw": "{\r\n    \"city\":\"Milan\",\r\n    \"seatAvailable\":10\r\n    \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -406,35 +445,41 @@
 			]
 		},
 		{
-			"name": "BOOKING",
+			"name": "VALUTATION",
 			"item": [
 				{
-					"name": "GET ALL BOOKING",
+					"name": "GET ALL  valutation",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/booking",
+							"raw": "http://localhost:8080/valutationAverage?id=1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"booking"
+								"valutationAverage"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "ADD  BOOKING",
+					"name": "ADD VALUTATION",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"client\":{\r\n        \"idClient\":1\r\n    },\r\n    \"ticket\":{\r\n        \"idTicket\":2\r\n    }\r\n}",
+							"raw": "{\r\n    \"movie\": {\r\n        \"idMovie\": 1\r\n    },\r\n    \"client\": {\r\n        \"idClient\": 1\r\n    },\r\n    \"vote\": 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -442,14 +487,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/booking",
+							"raw": "http://localhost:8080/valutation",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"booking"
+								"valutation"
 							]
 						}
 					},
