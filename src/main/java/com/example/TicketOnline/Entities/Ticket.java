@@ -1,25 +1,13 @@
 package com.example.TicketOnline.Entities;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
-
- import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class Ticket {
@@ -34,6 +22,13 @@ public class Ticket {
 	private String stateTicket;
 
 	private int qtaTicket;
+
+
+	@OneToMany(mappedBy = "ticket")
+		@JsonManagedReference
+	private List<Seat> seat;
+
+
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	 @JoinColumn(name = "idMovie")
@@ -109,9 +104,13 @@ public class Ticket {
 		this.clients = clients;
 	}
 
+	public List<Seat> getSeat() {
+		return seat;
+	}
 
-
-
+	public void setSeat(List<Seat> seat) {
+		this.seat = seat;
+	}
 
 	public Cinema getCinema() {
 		return cinema;

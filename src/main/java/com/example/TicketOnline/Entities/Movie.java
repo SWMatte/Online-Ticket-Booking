@@ -29,6 +29,9 @@ public class Movie {
     private LocalDate releaseMovie;
     private boolean available;
 
+
+
+
     @JsonIgnore
     @OneToMany(mappedBy = "movies")
     @OnDelete(action = OnDeleteAction.CASCADE)

@@ -2,7 +2,9 @@ package com.example.TicketOnline.controller;
 
 import java.util.List;
 
+import com.example.TicketOnline.Entities.Seat;
 import com.example.TicketOnline.response.ResponseHandler;
+import com.example.TicketOnline.service.IServiceSeat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ public class CinemaController {
     @Autowired
     IService<Cinema> cinemaService;
 
+
+
     @GetMapping("/cinema")
     public ResponseEntity<Object> findAll() {
         try {
@@ -36,6 +40,9 @@ public class CinemaController {
     public ResponseEntity<Object> addElement(@RequestBody Cinema cinema) {
         try {
             cinemaService.add(cinema);
+
+
+
            return ResponseHandler.generateMessage("Cinema add" , HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseHandler.generateMessage("Cinema gia' inserito" , HttpStatus.BAD_REQUEST);

@@ -23,28 +23,10 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Ticket u SET u.qtaTicket = ?1 WHERE clients.idClient=?2 AND u.timeMovie=?3 ")
-    public void updateQtaTicket(int nuovaQtaTicket, int idClient, LocalDate timeMovie);
-
-    @Query(value = """
-            select qta_ticket
-                    from ticket
-                      inner join client using(id_client)
-                            where id_client=:idClient and time_movie =:date
-            """, nativeQuery = true)
-    public int qtaTicket(int idClient, LocalDate date);
+    @Query("UPDATE Ticket u SET u.qtaTicket = ?1,u.stateTicket=?2  WHERE idTicket=?3 ")
+    public void ticketAfterDelete(int nuovaQtaTicket, String stateTicket, int idTicket);
 
 
-    @Query(value = """
-            select *
-                    from ticket
-                    inner join client using(id_client)
-                      inner join cinema using(id_cinema)
-                       inner join movie using(id_movie)
-                            where id_client=:idClient and time_movie =:date
-            """ ,nativeQuery = true)
-
-    public Ticket ticketAgg(int idClient, LocalDate date);
 
 
     @Query("SELECT movies FROM Ticket u WHERE u.clients.idClient = ?1")

@@ -17,7 +17,7 @@ public interface CinemaRepository extends JpaRepository<Cinema,Integer> {
     public void updateCinema(String city, int seatAvailable, int idCinema);
 
 
-    public List<Cinema> findBycity(String city);
+
 
     public Cinema findByCity(String city);
 
@@ -25,5 +25,7 @@ public interface CinemaRepository extends JpaRepository<Cinema,Integer> {
     @Transactional
     @Query("UPDATE Cinema u SET   u.seatAvailable= ?1  WHERE u.idCinema= ?2")
     public void updateCinemaById(int seatAvailable, int idCinema);
+
+
 
 }

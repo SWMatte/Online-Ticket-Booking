@@ -20,8 +20,7 @@ import com.example.TicketOnline.service.IService;
 @RestController
 public class TicketController {
 
-    @Autowired
-    IService<Ticket> ticketService;
+
 
     @Autowired
     ServiceTicket serviceTicket;
@@ -32,7 +31,7 @@ public class TicketController {
     @GetMapping("/ticket")
     public ResponseEntity<Object> findAll() throws Exception {
         try {
-            return ResponseHandler.generateResponse("Ticket add", HttpStatus.OK, ticketService.getAll());
+            return ResponseHandler.generateResponse("Ticket add", HttpStatus.OK, iServiceTicket.getAll());
         } catch (Exception e) {
             return ResponseHandler.generateResponse("Nessun ticket presente", HttpStatus.BAD_REQUEST, null);
         }
@@ -69,14 +68,14 @@ public class TicketController {
     @DeleteMapping("/ticket/{id}")
     public void deleteElement(@PathVariable int id) {
 
-        ticketService.remove(id);
+        iServiceTicket.remove(id);
     }
 
 
     @PutMapping("/ticket")
     public void updateElement(@RequestBody Ticket ticket) {
         try {
-            ticketService.update(ticket);
+            iServiceTicket.update(ticket);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -86,23 +85,25 @@ public class TicketController {
 
 
     @PostMapping("/removesingleticket")
-    public ResponseEntity<Object> ticketUpdated(@RequestParam("idClient") int idClient, @RequestParam("date") LocalDate date, @RequestParam("qtaRimossa") int qtaRimossa, @RequestParam("idCinema") int idCinema, @RequestParam("idMovie") int idMovie) throws ExceptionTicket {
+    public ResponseEntity<Object> ticketUpdated(@RequestParam("idTicket") int idTicket, @RequestParam("qtaRimossa") int qtaRimossa) throws ExceptionTicket {
 
-        try {
-            return ResponseHandler.generateResponse("Biglietti Rimossi",HttpStatus.OK, iServiceTicket.deleteSingleTicket(idClient, date, qtaRimossa, idCinema, idMovie));
 
-        } catch (ExceptionTicket e){
-            return ResponseHandler.generateResponse(e.getMessage() ,HttpStatus.BAD_REQUEST, null);
 
-        }  catch (NoSuchElementException e){
 
-              return ResponseHandler.generateResponse( "Client not found",HttpStatus.BAD_REQUEST, null);
+            try {
 
+                return ResponseHandler.generateResponse("Biglietti Rimossi", HttpStatus.OK, iServiceTicket.deleteSingleTicket(idTicket, qtaRimossa));
+
+            } catch (ExceptionTicket e) {
+                return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+
+            } catch (NoSuchElementException e) {
+
+                return ResponseHandler.generateResponse("Ticket not found", HttpStatus.BAD_REQUEST, null);
+
+            }
         }
-
-
-
 
     }
 
-}
+

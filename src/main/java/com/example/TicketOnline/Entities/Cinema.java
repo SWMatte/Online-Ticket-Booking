@@ -15,8 +15,10 @@ public class Cinema {
 	private String city;
 	private int seatAvailable;
 
-	
-
+	@JsonIgnore
+	@OneToMany(mappedBy = "cinemaSeat")
+	@OnDelete(action = OnDeleteAction.CASCADE )
+	private List<Seat> seat;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "cinema")

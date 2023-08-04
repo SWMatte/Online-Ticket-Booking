@@ -3,23 +3,21 @@ package com.example.TicketOnline.service.serviceImp;
 import java.time.*;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import com.example.TicketOnline.DTO.TickeDTO;
 import com.example.TicketOnline.Entities.*;
 import com.example.TicketOnline.exceptions.ExceptionTicket;
-import com.example.TicketOnline.repositories.CinemaRepository;
-import com.example.TicketOnline.repositories.ClientRepository;
-import com.example.TicketOnline.repositories.MovieRepository;
+import com.example.TicketOnline.repositories.*;
 import com.example.TicketOnline.service.IServiceTicket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.TicketOnline.repositories.TicketRepository;
 import com.example.TicketOnline.service.IService;
 
 
 @Service
-public class ServiceTicket implements IService<Ticket>, IServiceTicket<Ticket> {
+public class ServiceTicket implements  IServiceTicket<Ticket> {
 
     @Autowired
     TicketRepository ticketRepository;
@@ -31,46 +29,50 @@ public class ServiceTicket implements IService<Ticket>, IServiceTicket<Ticket> {
     @Autowired
     MovieRepository movieRepository;
 
+    @Autowired
+    SeatRepository seatRepository;
+
 
     public TickeDTO addTicketDTO(Ticket element) {
         Client c = clientRepository.findById(element.getClients().getIdClient()).get();
         Movie m = movieRepository.findById(element.getMovies().getIdMovie()).get();
         Cinema cinema = cinemaRepository.findById(element.getCinema().getIdCinema()).get();
-        int newSeatAvailable = cinema.getSeatAvailable() - element.getQtaTicket();
-
         TickeDTO ticket = null;
+
+        List<Seat> seatList = element.getSeat().stream().map(seat -> seatRepository.findById(seat.getIdSeat()).orElseThrow()).collect(Collectors.toList()); // lista posti a sedere
+
         if (c != null && m != null && cinema != null && element.getQtaTicket() > 0) {
 
             if (element.getTimeMovie().isAfter(m.getReleaseMovie()) || element.getTimeMovie().isEqual(m.getReleaseMovie()) && m.isAvailable()) {
 
+                if (seatList.size() == element.getQtaTicket()) {
 
-                if (cinema.getSeatAvailable() >= element.getQtaTicket()) {
-
-                    Ticket t = new Ticket();
                     LocalDate timeMovie = element.getTimeMovie();
 
-                    t.setPrice(element.getPrice());
-                    t.setTimeMovie(timeMovie);
-                    t.setStateTicket(element.getStateTicket());
-                    t.setQtaTicket(element.getQtaTicket());
-                    t.setMovies(m);
-                    t.setClients(c);
-                    t.setCinema(cinema);
+                    element.setTimeMovie(timeMovie);
+                    element.setMovies(m);
+                    element.setClients(c);
+                    element.setCinema(cinema);
+                    ticketRepository.save(element);
 
+                    int ticketId = element.getIdTicket();
 
-                    ticketRepository.save(t);
-                    cinemaRepository.updateCinemaById(newSeatAvailable, element.getCinema().getIdCinema());
+                    seatList.forEach(seat -> seatRepository.updateSeat(false, ticketId, seat.getIdSeat()));
 
-                    ticket = new TickeDTO(element.getPrice(), element.getTimeMovie(), element.getStateTicket(), element.getQtaTicket(), m, c, cinema, element.getQtaTicket() * element.getPrice());
+                    String nameSeat = seatList.stream().map(s -> s.getNameSeat()).collect(Collectors.toList()).toString();
+
+                    ticket = new TickeDTO(element.getPrice(), element.getTimeMovie(), element.getStateTicket(), element.getQtaTicket(), m, c, cinema, nameSeat, element.getQtaTicket() * element.getPrice());
+
 
                 } else {
-                    System.out.println("Capienza posti superata");
+                    throw new IllegalArgumentException("Il numero di posti riservati deve corrispondere alla quantità di biglietti acquistati.");
                 }
             } else {
                 System.out.println("il film non è ancora uscito");
             }
 
         } else {
+
             new Exception();
         }
 
@@ -81,27 +83,26 @@ public class ServiceTicket implements IService<Ticket>, IServiceTicket<Ticket> {
     public TickeDTO addTicketDTODiscount(Ticket element) {
         Client c = clientRepository.findById(element.getClients().getIdClient()).get();
         Movie m = movieRepository.findById(element.getMovies().getIdMovie()).get();
-        Cinema cinema = cinemaRepository.findById(element.getCinema().getIdCinema()).get();
-        int newSeatAvailable = cinema.getSeatAvailable() - element.getQtaTicket();
-        TickeDTO ticket = null;
+        Cinema cinema = cinemaRepository.findById(element.getCinema().getIdCinema()).get();   //trovo le entita'
+        TickeDTO ticket = null;                                                                 // istanzio il DTO
+
+        List<Seat> seatList = element.getSeat().stream().map(seat -> seatRepository.findById(seat.getIdSeat()).orElseThrow()).collect(Collectors.toList()); // lista posti a sedere
 
         if (c != null && m != null && cinema != null && element.getQtaTicket() > 0) {
 
             if (element.getTimeMovie().isAfter(m.getReleaseMovie()) || element.getTimeMovie().isEqual(m.getReleaseMovie()) && m.isAvailable()) {
 
-
-                if (cinema.getSeatAvailable() >= element.getQtaTicket()) {
+                if (seatList.size() == element.getQtaTicket()) {
 
                     LocalDate timeMovie = element.getTimeMovie();
-                    element.setTimeMovie(timeMovie);
+
+                    element.setTimeMovie(timeMovie);                    // riempio l'elemento che salvo nel DB
                     element.setMovies(m);
                     element.setClients(c);
                     element.setCinema(cinema);
-
                     ticketRepository.save(element);
-                    cinemaRepository.updateCinemaById(newSeatAvailable, element.getCinema().getIdCinema());
 
-                    int ageClient = c.getAge();
+                    int ageClient = c.getAge();                         // in base all'eta del client applico lo sconto
                     double discount;
                     double priceTicket = 0;
                     if (c.getDiscount().equals(Discount.VIP)) {
@@ -120,16 +121,24 @@ public class ServiceTicket implements IService<Ticket>, IServiceTicket<Ticket> {
                         }
                     }
 
-                    ticket = new TickeDTO(element.getPrice(), element.getTimeMovie(), element.getStateTicket(), element.getQtaTicket(), m, c, cinema, priceTicket);
+                    int ticketId = element.getIdTicket();
+
+                    seatList.forEach(seat -> seatRepository.updateSeat(false, ticketId, seat.getIdSeat()));
+
+                    String nameSeat = seatList.stream().map(s -> s.getNameSeat()).collect(Collectors.toList()).toString();
+
+                    ticket = new TickeDTO(element.getPrice(), element.getTimeMovie(), element.getStateTicket(), element.getQtaTicket(), m, c, cinema, nameSeat, element.getQtaTicket()*priceTicket);
+
 
                 } else {
-                    System.out.println("Capienza posti superata");
+                    throw new IllegalArgumentException("Il numero di posti riservati deve corrispondere alla quantità di biglietti acquistati.");
                 }
             } else {
                 System.out.println("il film non è ancora uscito");
             }
 
         } else {
+
             new Exception();
         }
 
@@ -181,9 +190,11 @@ public class ServiceTicket implements IService<Ticket>, IServiceTicket<Ticket> {
     @Override
     public void remove(int id) {
         ticketRepository.deleteById(id);
+
+
     }
 
-    @Override
+    @Override // non funziona
     public void update(Ticket element) throws Exception {
         Client c = clientRepository.findById(element.getClients().getIdClient()).orElse(null);
         Movie m = movieRepository.findById(element.getMovies().getIdMovie()).orElse(null);
@@ -197,36 +208,42 @@ public class ServiceTicket implements IService<Ticket>, IServiceTicket<Ticket> {
         }
     }
 
-
     @Override
-    public List<Ticket> getAll() {
+    public List<Ticket> getAll() throws Exception {
         return ticketRepository.findAll();
     }
 
 
     @Override
-    public Ticket deleteSingleTicket(int idClient, LocalDate date, int qtaRimossa, int idCinema, int idMovie) throws ExceptionTicket {
-        Client c = clientRepository.findById(idClient).orElseThrow();
-        if (c != null) {
-            //recupero la qta di biglietti del cliente
-            int qtaAttuale = ticketRepository.qtaTicket(idClient, date);
+    public Ticket deleteSingleTicket(int idTicket,int qtaRimossa) throws ExceptionTicket {
+        Ticket t= ticketRepository.findById(idTicket).orElseThrow();
 
-            if (qtaRimossa >= 1 && qtaRimossa <= qtaAttuale) {
-                int nuovaQtaTicket = qtaAttuale - qtaRimossa;
-                int cinemaCapienza = cinemaRepository.findById(idCinema).get().getSeatAvailable();
-                int nuovaCapienza = cinemaCapienza + qtaRimossa;
-                cinemaRepository.updateCinemaById(nuovaCapienza, idCinema);
-                ticketRepository.updateQtaTicket(nuovaQtaTicket, idClient, date);
+        int databaseQta=t.getQtaTicket();
+
+       Ticket ticketReturn;
+        List<Seat> seatList = seatRepository.findByTicketId(idTicket);
+
+            if (qtaRimossa >= 1 && qtaRimossa <= databaseQta) {
+
+                int newQta= databaseQta-qtaRimossa;
+                String newStateTicket="Modified";
+
+                ticketRepository.ticketAfterDelete(newQta,newStateTicket,idTicket);
+
+                for (int i = 0; i < qtaRimossa; i++) {
+                    Seat seat = seatList.get(i);
+
+                    seatRepository.updateSeat(true,null,seat.getIdSeat());
+                }
+                    ticketReturn= ticketRepository.findById(idTicket).orElseThrow();
 
             } else {
                 throw new ExceptionTicket("Non hai a disposizione tutti questi biglietti indicati", new IllegalArgumentException("Quantità di biglietti non valida"));
 
             }
-        } else {
-            throw new NoSuchElementException();
-
-        }
-
-        return ticketRepository.ticketAgg(idClient, date);
+        return  ticketReturn;
     }
 }
+
+
+
