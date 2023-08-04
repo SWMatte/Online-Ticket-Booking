@@ -27,10 +27,11 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     public void ticketAfterDelete(int nuovaQtaTicket, String stateTicket, int idTicket);
 
 
+    @Query("SELECT idTicket FROM Ticket u WHERE u.clients.idClient = ?1 and u.movies.idMovie=?2")
+    public Integer idTicket(int idClient, int idMovie);
 
 
-    @Query("SELECT movies FROM Ticket u WHERE u.clients.idClient = ?1")
-    public Movie moviesByClient(int idClient);
+
 
 }
 

@@ -64,30 +64,8 @@ public class TicketController {
     }
 
 
-
-    @DeleteMapping("/ticket/{id}")
-    public void deleteElement(@PathVariable int id) {
-
-        iServiceTicket.remove(id);
-    }
-
-
-    @PutMapping("/ticket")
-    public void updateElement(@RequestBody Ticket ticket) {
-        try {
-            iServiceTicket.update(ticket);
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-
-        }
-    }
-
-
     @PostMapping("/removesingleticket")
     public ResponseEntity<Object> ticketUpdated(@RequestParam("idTicket") int idTicket, @RequestParam("qtaRimossa") int qtaRimossa) throws ExceptionTicket {
-
-
 
 
             try {

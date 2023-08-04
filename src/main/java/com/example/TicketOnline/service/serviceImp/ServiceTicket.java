@@ -17,7 +17,7 @@ import com.example.TicketOnline.service.IService;
 
 
 @Service
-public class ServiceTicket implements  IServiceTicket<Ticket> {
+public class ServiceTicket implements IServiceTicket<Ticket> {
 
     @Autowired
     TicketRepository ticketRepository;
@@ -127,7 +127,7 @@ public class ServiceTicket implements  IServiceTicket<Ticket> {
 
                     String nameSeat = seatList.stream().map(s -> s.getNameSeat()).collect(Collectors.toList()).toString();
 
-                    ticket = new TickeDTO(element.getPrice(), element.getTimeMovie(), element.getStateTicket(), element.getQtaTicket(), m, c, cinema, nameSeat, element.getQtaTicket()*priceTicket);
+                    ticket = new TickeDTO(element.getPrice(), element.getTimeMovie(), element.getStateTicket(), element.getQtaTicket(), m, c, cinema, nameSeat, element.getQtaTicket() * priceTicket);
 
 
                 } else {
@@ -187,26 +187,8 @@ public class ServiceTicket implements  IServiceTicket<Ticket> {
 
     }
 
-    @Override
-    public void remove(int id) {
-        ticketRepository.deleteById(id);
 
 
-    }
-
-    @Override // non funziona
-    public void update(Ticket element) throws Exception {
-        Client c = clientRepository.findById(element.getClients().getIdClient()).orElse(null);
-        Movie m = movieRepository.findById(element.getMovies().getIdMovie()).orElse(null);
-
-        if (c != null && m != null) {
-
-
-            ticketRepository.updateTicket(element.getPrice(), element.getTimeMovie(), element.getStateTicket(), m, c, element.getIdTicket());
-        } else {
-            throw new Exception("Client or Movie not found");
-        }
-    }
 
     @Override
     public List<Ticket> getAll() throws Exception {
@@ -215,33 +197,45 @@ public class ServiceTicket implements  IServiceTicket<Ticket> {
 
 
     @Override
-    public Ticket deleteSingleTicket(int idTicket,int qtaRimossa) throws ExceptionTicket {
-        Ticket t= ticketRepository.findById(idTicket).orElseThrow();
+    public Ticket deleteSingleTicket(int idTicket, int qtaRimossa) throws ExceptionTicket {
+        Ticket t = ticketRepository.findById(idTicket).orElseThrow();
 
-        int databaseQta=t.getQtaTicket();
+        int databaseQta = t.getQtaTicket();
 
-       Ticket ticketReturn;
+        Ticket ticketReturn = null;
         List<Seat> seatList = seatRepository.findByTicketId(idTicket);
+
+        if (t.getQtaTicket() == qtaRimossa) {
+            for (int i = 0; i < qtaRimossa; i++) {
+                Seat seat = seatList.get(i);
+                seatRepository.updateSeat(true, null, seat.getIdSeat());
+
+            }
+            ticketRepository.deleteById(t.getIdTicket());
+        } else{
+
 
             if (qtaRimossa >= 1 && qtaRimossa <= databaseQta) {
 
-                int newQta= databaseQta-qtaRimossa;
-                String newStateTicket="Modified";
+                int newQta = databaseQta - qtaRimossa;
+                String newStateTicket = "Modified";
 
-                ticketRepository.ticketAfterDelete(newQta,newStateTicket,idTicket);
+                ticketRepository.ticketAfterDelete(newQta, newStateTicket, idTicket);
 
                 for (int i = 0; i < qtaRimossa; i++) {
                     Seat seat = seatList.get(i);
 
-                    seatRepository.updateSeat(true,null,seat.getIdSeat());
+                    seatRepository.updateSeat(true, null, seat.getIdSeat());
                 }
-                    ticketReturn= ticketRepository.findById(idTicket).orElseThrow();
+                ticketReturn = ticketRepository.findById(idTicket).orElseThrow();
 
             } else {
                 throw new ExceptionTicket("Non hai a disposizione tutti questi biglietti indicati", new IllegalArgumentException("Quantità di biglietti non valida"));
 
             }
-        return  ticketReturn;
+        }
+
+        return ticketReturn;
     }
 }
 
