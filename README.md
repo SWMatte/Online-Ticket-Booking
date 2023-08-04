@@ -27,10 +27,8 @@ The purpose of this application is to allow end-users to purchase tickets for sp
 - Remove a specific ticket or remove all purchased tickets.
 ## Customers Entity:
 - Perform CRUD operations on customers' data.
-- 
 ## Movie Entity:
 - Perform CRUD operations on movie data.
-- 
 ##Cinema Entity:
 - Perform CRUD operations on cinema data.
 - Add seating arrangements based on the predefined capacity of the cinema.
