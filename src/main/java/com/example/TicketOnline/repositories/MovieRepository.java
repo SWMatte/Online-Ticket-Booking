@@ -18,7 +18,13 @@ public interface MovieRepository extends JpaRepository<Movie,Integer> {
     public void updateMovie(String titleMovie, String durationMovie, LocalDate releaseMovie, boolean available , int idMovie);
 
 
-        public Movie findByTitleMovie(String titleMovie);
+    @Modifying
+    @Transactional
+    @Query("UPDATE Movie u SET  u.available= ?1 WHERE u.idMovie= ?2")
+    public void updateAvailable( boolean available , int idMovie);
+
+
+    public Movie findByTitleMovie(String titleMovie);
 
 
 }

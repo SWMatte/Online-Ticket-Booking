@@ -4,16 +4,11 @@ import java.util.List;
 
 import com.example.TicketOnline.response.ResponseHandler;
 import com.example.TicketOnline.service.serviceImp.ServiceClient;
+import com.example.TicketOnline.service.serviceImp.ServiceTicket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.TicketOnline.Entities.Client;
 import com.example.TicketOnline.service.IService;
@@ -26,9 +21,12 @@ public class ClientController {
     @Autowired
     ServiceClient serviceClient;
 
+    @Autowired
+    ServiceTicket serviceTicket;
+
 
     @GetMapping("/client")
-    public ResponseEntity<Object> findAll() throws Exception {
+    public ResponseEntity<Object> findAll() throws Exception { // usato poi dall'amministratore per avere traccia di tutti i clienti
 
         try {
             return ResponseHandler.generateResponse("Client add", HttpStatus.OK, clientService.getAll());
@@ -40,7 +38,7 @@ public class ClientController {
     }
 
 
-    @PostMapping("/client")
+    @PostMapping("/client")  // usato per la registrazione in fornt-end
     public ResponseEntity<Object> addElement(@RequestBody Client client) {
 
         try {
@@ -54,14 +52,15 @@ public class ClientController {
 
     }
 
-    @DeleteMapping("/client/{id}")
+    @DeleteMapping("/client/{id}")  // per eliminare un cliente specifico
     public void deleteElement(@PathVariable int id) {
 
         clientService.remove(id);
     }
 
 
-    @PutMapping("/client")
+    @PutMapping("/client")  // usato dal client per modificare la sua anagrafica
+
     public ResponseEntity<Object> updateElement(@RequestBody Client client) {
 
         try {
@@ -73,15 +72,27 @@ public class ClientController {
 
     }
 
-    @GetMapping("/client/{id}")
-    public Client clientById(@PathVariable int id) {
+    @GetMapping("/clientid")   // usato dal client per far tornare la sua anagrafica dal DB
+    public Client clientById(@RequestParam("name") String name, @RequestParam("lastName") String lastName) {
 
         try {
-            return serviceClient.findById(id);
+            return serviceClient.findById(name,lastName);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("/clientticket")  // ritornano i ticket associati a quel utente
+    public ResponseEntity<Object> findTicketByClient(@RequestParam("idClient") int idClient){
+        try {
+
+        return ResponseHandler.generateResponse("Ticket associati: ",HttpStatus.OK, serviceTicket.findTicketByClient(idClient));
+        }catch (Exception e) {
+
+            return ResponseHandler.generateMessage("NON hai nessun ticket a disposizione",HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 
 }

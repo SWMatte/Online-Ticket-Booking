@@ -17,6 +17,10 @@ public class Client {
     private String lastName;
     private int age;
 
+    private String email;
+
+    private boolean commecialMessage;
+
     @Enumerated(EnumType.STRING)
     private Discount discount = Discount.NESSUNO;
 
@@ -91,5 +95,21 @@ public class Client {
 
     public void setDiscount(Discount discount) {
         this.discount = discount;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isCommecialMessage() {
+        return commecialMessage;
+    }
+
+    public void setCommecialMessage(boolean commecialMessage) {
+        this.commecialMessage = commecialMessage;
     }
 }

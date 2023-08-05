@@ -27,7 +27,7 @@ public class CinemaController {
 
 
 
-    @GetMapping("/cinema")
+    @GetMapping("/cinema")   // ti mostra i cinema presenti -> dentro dovrebbe poi mostrarti i film associati a quel cinema (RELAZIONE MANY TO MANY NON PRESENTE)
     public ResponseEntity<Object> findAll() {
         try {
             return ResponseHandler.generateResponse("lista" , HttpStatus.OK, cinemaService.getAll());
@@ -36,12 +36,10 @@ public class CinemaController {
         }
     }
 
-    @PostMapping("/cinema")
+    @PostMapping("/cinema") // aggiunge un cinema dall'amministratore
     public ResponseEntity<Object> addElement(@RequestBody Cinema cinema) {
         try {
             cinemaService.add(cinema);
-
-
 
            return ResponseHandler.generateMessage("Cinema add" , HttpStatus.OK);
         } catch (IllegalArgumentException e) {
@@ -51,14 +49,14 @@ public class CinemaController {
         }
     }
 
-    @DeleteMapping("/cinema/{id}")
+    @DeleteMapping("/cinema/{id}") // cancella un cinema specifico
     public void deleteElement(@PathVariable int id) {
 
         cinemaService.remove(id);
     }
 
 
-    @PutMapping("/cinema")
+    @PutMapping("/cinema") // aggiorna un cinema amministratore
     public ResponseEntity<Object> updateElement(@RequestBody Cinema cinema) {
 
         try {

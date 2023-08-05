@@ -11,8 +11,13 @@ public interface ClientRepository extends JpaRepository<Client,Integer> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Client u SET u.name= ?1, u.lastName =?2 where u.idClient =?3")
-    public void updateClient(String name,String lastName,int idClient);
+    @Query("UPDATE Client u SET u.name= ?1, u.lastName =?2 , u.age =?3, u.email =?4, u.commecialMessage =?5 where u.idClient =?6")
+    public void updateClient(String name,String lastName,int idClient,int age, String email, boolean commercialMessage);
 
+
+    @Query("SELECT s from Client s WHERE s.name=?1 AND s.lastName=?2")
     public Client findByNameAndLastName(String name,String lastName);
+
+
+
 }

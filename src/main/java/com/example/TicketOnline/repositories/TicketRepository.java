@@ -15,10 +15,9 @@ import java.util.List;
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Ticket u SET u.price = ?1, u.timeMovie = ?2, u.stateTicket = ?3, u.movies = ?4, u.clients = ?5 WHERE u.idTicket = ?6")
-    public void updateTicket(double price, LocalDate timeMovie, String stateTicket, Movie movies, Client clients, int idTicket);
+    @Query("SELECT u from Ticket u WHERE clients.idClient=?1")
+    public List<Ticket> ticketByClient(int idClient);
+
 
 
     @Modifying
@@ -29,6 +28,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     @Query("SELECT idTicket FROM Ticket u WHERE u.clients.idClient = ?1 and u.movies.idMovie=?2")
     public Integer idTicket(int idClient, int idMovie);
+
 
 
 

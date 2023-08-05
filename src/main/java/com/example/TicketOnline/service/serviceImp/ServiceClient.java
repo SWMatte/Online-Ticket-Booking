@@ -2,6 +2,7 @@ package com.example.TicketOnline.service.serviceImp;
 
  import java.util.List;
 
+ import com.example.TicketOnline.Entities.Ticket;
  import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class ServiceClient implements IService<Client>  {
 
 	@Override
 	public void update(Client element) throws Exception {
-		clientRepository.updateClient(element.getName(), element.getLastName(), element.getIdClient());
+		clientRepository.updateClient(element.getName(), element.getLastName(), element.getIdClient(),element.getAge(),element.getEmail(),element.isCommecialMessage());
 		
 	}
 
@@ -44,8 +45,11 @@ public class ServiceClient implements IService<Client>  {
 
 
 
-	public Client findById(int id) throws Exception {
-		return clientRepository.findById(id).orElseThrow(Exception::new);
+	public Client findById(String name,String lastName) {
+		return clientRepository.findByNameAndLastName(name,lastName);
 
 	}
+
+
+
 }

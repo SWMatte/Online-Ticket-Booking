@@ -18,7 +18,6 @@ public interface CinemaRepository extends JpaRepository<Cinema,Integer> {
 
 
 
-
     public Cinema findByCity(String city);
 
     @Modifying

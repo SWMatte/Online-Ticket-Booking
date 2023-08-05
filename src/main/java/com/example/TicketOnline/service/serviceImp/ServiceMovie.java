@@ -1,6 +1,7 @@
 package com.example.TicketOnline.service.serviceImp;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,14 @@ public class ServiceMovie implements IService<Movie> {
 
     @Override
     public List<Movie> getAll() {
-        return movieRepository.findAll();
+        return movieRepository.findAll().stream().filter(movie->movie.isAvailable()).collect(Collectors.toList());
+    }
+
+    public List<Movie> getNotAvailableMovie() {  // usato dall'amministratore per visualizzare film non ancora disponibili
+        return movieRepository.findAll().stream().filter(movie->!movie.isAvailable()).collect(Collectors.toList());
+    }
+    public void updateAvailable(Movie element) throws Exception {  // usato per aggiornare il film non disponibile dall'amministratore
+        movieRepository.updateAvailable(element.isAvailable(), element.getIdMovie());
     }
 
 }

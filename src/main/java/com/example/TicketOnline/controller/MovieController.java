@@ -23,7 +23,7 @@ public class MovieController {
     @Autowired
     IService<Movie> movieService;
 
-    @GetMapping("/movie")
+    @GetMapping("/movie")  // usati per riempire la vetrina
     public ResponseEntity<Object> findAll() throws Exception {
 
         try {
@@ -34,7 +34,7 @@ public class MovieController {
     }
 
 
-    @PostMapping("/movie")
+    @PostMapping("/movie")   // usato dall amministratore per aggiungere un nuovo film
     public ResponseEntity<Object> addElement(@RequestBody Movie movie) {
 
         try {
@@ -47,14 +47,14 @@ public class MovieController {
         }
     }
 
-    @DeleteMapping("/movie/{id}")
+    @DeleteMapping("/movie/{id}") // usato x rimuovere un film dall amministratore
     public void deleteElement(@PathVariable int id) {
 
         movieService.remove(id);
     }
 
 
-    @PutMapping("/movie")
+    @PutMapping("/movie") // usato x aggiornare un film dall amministratore
     public ResponseEntity<Object> updateElement(@RequestBody Movie movie) {
 
         try {

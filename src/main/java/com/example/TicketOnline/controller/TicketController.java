@@ -21,7 +21,6 @@ import com.example.TicketOnline.service.IService;
 public class TicketController {
 
 
-
     @Autowired
     ServiceTicket serviceTicket;
 
@@ -39,7 +38,7 @@ public class TicketController {
     }
 
 
-    @PostMapping("/ticket")
+    @PostMapping("/ticket") // TICKET VIENE AGGIUNTO DALL UTENTE DOPO CHE HA RECUPERATO TUTTI I VALORI
     public ResponseEntity<Object> addElement(@RequestBody Ticket ticket) {
         TickeDTO a = null;
         try {
@@ -51,7 +50,7 @@ public class TicketController {
         return ResponseHandler.generateResponse("TicketNOdiscount", HttpStatus.OK, a);
     }
 
-    @PostMapping("/ticketDiscount")
+    @PostMapping("/ticketDiscount") // ADD DI TICKET SE L'UTENTE HA SELEZIONATO LO SCONTO
     public ResponseEntity<Object> addTicketDiscount(@RequestBody Ticket ticket) {
         TickeDTO a = null;
         try {
@@ -64,24 +63,38 @@ public class TicketController {
     }
 
 
-    @PostMapping("/removesingleticket")
+    @PostMapping("/removesingleticket") // rimozione del ticket
     public ResponseEntity<Object> ticketUpdated(@RequestParam("idTicket") int idTicket, @RequestParam("qtaRimossa") int qtaRimossa) throws ExceptionTicket {
 
 
-            try {
+        try {
 
-                return ResponseHandler.generateResponse("Biglietti Rimossi", HttpStatus.OK, iServiceTicket.deleteSingleTicket(idTicket, qtaRimossa));
+            return ResponseHandler.generateResponse("Biglietti Rimossi", HttpStatus.OK, iServiceTicket.deleteSingleTicket(idTicket, qtaRimossa));
 
-            } catch (ExceptionTicket e) {
-                return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        } catch (ExceptionTicket e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
 
-            } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
 
-                return ResponseHandler.generateResponse("Ticket not found", HttpStatus.BAD_REQUEST, null);
+            return ResponseHandler.generateResponse("Ticket not found", HttpStatus.BAD_REQUEST, null);
 
-            }
+        }
+    }
+
+    @PostMapping("/sendemail") // AMMINISTRATORE MANDA L'EMAIL CON MESSAGGI A CHI IMPOSTA TRUE SULLO STATUS
+    public ResponseEntity<Object> sendEmail() {
+        try {
+            serviceTicket.sendEmail();
+            return ResponseHandler.generateMessage("Email inviate con successo", HttpStatus.OK);
+
+        } catch (Exception e) {
+            return ResponseHandler.generateMessage("Erroe di invio email" + e.getMessage(), HttpStatus.BAD_REQUEST);
+
         }
 
     }
+
+
+}
 
 
