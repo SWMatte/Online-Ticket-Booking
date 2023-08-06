@@ -20,7 +20,7 @@ public class ServiceMovie implements IService<Movie> {
 
     @Override
     public void add(Movie element) throws Exception {
-        if (movieRepository.findByTitleMovie(element.getTitleMovie())==null) {
+        if (!movieRepository.movieByIdCinema(element.getCinema().getIdCinema()).isPresent()) {
             movieRepository.save(element);
 
         } else {

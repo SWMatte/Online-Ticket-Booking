@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie,Integer> {
 
@@ -24,7 +25,9 @@ public interface MovieRepository extends JpaRepository<Movie,Integer> {
     public void updateAvailable( boolean available , int idMovie);
 
 
-    public Movie findByTitleMovie(String titleMovie);
+    @Query("SELECT u FROM Movie u WHERE u.cinema.idCinema=?1")
+    public Optional<Movie> movieByIdCinema(int idCinema);
+
 
 
 }

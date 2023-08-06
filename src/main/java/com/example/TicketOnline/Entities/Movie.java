@@ -3,20 +3,11 @@ package com.example.TicketOnline.Entities;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Movie {
@@ -30,8 +21,6 @@ public class Movie {
     private boolean available;
 
 
-
-
     @JsonIgnore
     @OneToMany(mappedBy = "movies")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -41,6 +30,11 @@ public class Movie {
     @OneToMany(mappedBy = "movie")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Valutation> valutazioni;
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idCinema")
+    private Cinema cinema;
 
     public int getIdMovie() {
         return idMovie;
@@ -97,5 +91,13 @@ public class Movie {
 
     public void setValutazioni(List<Valutation> valutazioni) {
         this.valutazioni = valutazioni;
+    }
+
+    public Cinema getCinema() {
+        return cinema;
+    }
+
+    public void setCinema(Cinema cinema) {
+        this.cinema = cinema;
     }
 }

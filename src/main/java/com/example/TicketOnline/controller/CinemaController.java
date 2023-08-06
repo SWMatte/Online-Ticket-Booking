@@ -27,7 +27,7 @@ public class CinemaController {
 
 
 
-    @GetMapping("/cinema")   // ti mostra i cinema presenti -> dentro dovrebbe poi mostrarti i film associati a quel cinema (RELAZIONE MANY TO MANY NON PRESENTE)
+    @GetMapping("/cinema")   // ti mostra i cinema presenti -> dentro dovrebbe poi mostrarti i film associati a quel cinema)
     public ResponseEntity<Object> findAll() {
         try {
             return ResponseHandler.generateResponse("lista" , HttpStatus.OK, cinemaService.getAll());
