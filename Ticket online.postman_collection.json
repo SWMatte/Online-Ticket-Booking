@@ -137,20 +137,54 @@
 					"response": []
 				},
 				{
-					"name": "GET  CLIENT BY ID",
+					"name": "GET  CLIENT BY NAME AND LASTNAME",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/client/1",
+							"raw": "http://localhost:8080/clientid?name=Mirko&lastName=Francini",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"client",
-								"1"
+								"clientid"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Mirko"
+								},
+								{
+									"key": "lastName",
+									"value": "Francini"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ALL TICKET BY CLIENT ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/clientticket?idClient=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clientticket"
+							],
+							"query": [
+								{
+									"key": "idClient",
+									"value": "1"
+								}
 							]
 						}
 					},
@@ -163,7 +197,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Mirko\",\r\n    \"lastName\":\"Francini\",\r\n    \"age\":22\r\n}",
+							"raw": "{\r\n    \"name\":\"Mirko\",\r\n    \"lastName\":\"Francini\",\r\n    \"age\":22,\r\n    \"email\":\"worldez32@gmail.com\",\r\n    \"commecialMessage\":true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -191,7 +225,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"idClient\":1,\r\n    \"name\":\"Tommaso\",\r\n    \"lastName\":\"Francini\"\r\n}",
+							"raw": "{\r\n    \"idClient\":1,\r\n    \"name\":\"Mirko\",\r\n    \"lastName\":\"Francini\",\r\n    \"age\":22,\r\n    \"email\":\"worldez32@gmail.com\",\r\n    \"commecialMessage\":true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
