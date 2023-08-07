@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie,Integer> {
@@ -24,9 +25,12 @@ public interface MovieRepository extends JpaRepository<Movie,Integer> {
     @Query("UPDATE Movie u SET  u.available= ?1 WHERE u.idMovie= ?2")
     public void updateAvailable( boolean available , int idMovie);
 
+    @Query("SELECT u FROM Movie u WHERE u.titleMovie=?1 AND u.cinema.idCinema=?2")
+    public Movie movieByTitleAndCinema(String titleMovie,int idCinema);
+
 
     @Query("SELECT u FROM Movie u WHERE u.cinema.idCinema=?1")
-    public Optional<Movie> movieByIdCinema(int idCinema);
+    public List<Optional<Movie>> movieByIdCinema(int idCinema);
 
 
 

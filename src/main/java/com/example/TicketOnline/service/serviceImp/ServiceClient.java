@@ -1,25 +1,43 @@
 package com.example.TicketOnline.service.serviceImp;
 
+ import java.util.HashSet;
  import java.util.List;
+ import java.util.Set;
 
+ import com.example.TicketOnline.Entities.Role;
  import com.example.TicketOnline.Entities.Ticket;
+ import com.example.TicketOnline.repositories.RoleRepository;
+ import jakarta.transaction.Transactional;
  import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+ import org.springframework.security.crypto.password.PasswordEncoder;
+ import org.springframework.stereotype.Service;
 
 import com.example.TicketOnline.Entities.Client;
  import com.example.TicketOnline.repositories.ClientRepository;
 import com.example.TicketOnline.service.IService;
 
-
+@Transactional
 @Service
 public class ServiceClient implements IService<Client>  {
 
 	@Autowired
 	ClientRepository clientRepository;
+	@Autowired
+	RoleRepository roleRepository;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
 	@Override
 	public void add(Client element) {
+		String encodedPassword = passwordEncoder.encode(element.getPassword());
+		Role clientRole = roleRepository.findByAuthority("ADMIN");
+		Set<Role> authorities = new HashSet<>();
+		authorities.add(clientRole);
+
 		if(clientRepository.findByNameAndLastName(element.getName(), element.getLastName())==null) {
+			element.setAuthorities(authorities);
+			element.setPassword(encodedPassword);
 			clientRepository.save(element);
 		}
 		else {

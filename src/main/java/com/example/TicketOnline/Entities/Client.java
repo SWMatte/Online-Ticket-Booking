@@ -1,15 +1,19 @@
 package com.example.TicketOnline.Entities;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-public class Client {
+public class Client implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idClient;
@@ -21,8 +25,18 @@ public class Client {
 
     private boolean commecialMessage;
 
+
     @Enumerated(EnumType.STRING)
     private Discount discount = Discount.NESSUNO;
+    private String username;
+    private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+    joinColumns = {@JoinColumn(name = "idClient")},
+    inverseJoinColumns = {@JoinColumn(name = "idRole")})
+    private Set<Role> authorities;
+
 
     @JsonIgnore
     @OneToMany(mappedBy = "clients", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST})
@@ -111,5 +125,53 @@ public class Client {
 
     public void setCommecialMessage(boolean commecialMessage) {
         this.commecialMessage = commecialMessage;
+    }
+
+
+    public void setAuthorities(Set<Role> authorities) {
+        this.authorities = authorities;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

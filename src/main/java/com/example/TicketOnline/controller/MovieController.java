@@ -3,28 +3,25 @@ package com.example.TicketOnline.controller;
 import java.util.List;
 
 import com.example.TicketOnline.response.ResponseHandler;
+import jakarta.persistence.NonUniqueResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.TicketOnline.Entities.Movie;
 import com.example.TicketOnline.service.IService;
 
 @RestController
-public class MovieController {
+
+ public class MovieController {
 
     @Autowired
     IService<Movie> movieService;
 
     @GetMapping("/movie")  // usati per riempire la vetrina
-    public ResponseEntity<Object> findAll() throws Exception {
+     public ResponseEntity<Object> findAll() throws Exception {
 
         try {
             return ResponseHandler.generateResponse("Movie add", HttpStatus.OK, movieService.getAll());
@@ -35,13 +32,14 @@ public class MovieController {
 
 
     @PostMapping("/movie")   // usato dall amministratore per aggiungere un nuovo film
-    public ResponseEntity<Object> addElement(@RequestBody Movie movie) {
+     public ResponseEntity<Object> addElement(@RequestBody Movie movie) {
 
         try {
             movieService.add(movie);
             return ResponseHandler.generateMessage("Movie aggiunto", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseHandler.generateMessage("Movie gia' inserito", HttpStatus.BAD_REQUEST);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
