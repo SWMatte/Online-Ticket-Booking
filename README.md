@@ -16,7 +16,7 @@ Java-Spring-Hibernate-MySQL
 
 ### how this application work?
 
-The purpose of this application is to allow end-users to purchase tickets for specific movies, displaying the purchased ticket with all the associated details, including Film, Cinema, Cost, and Customer information. The application also supports CRUD operations (Create, Read, Update, Delete) on various entities present within the application.
+The purpose of this application is to allow end-users to purchase tickets for specific movies, displaying the purchased ticket with all the associated details, including Film, Cinema, Cost, and Customer information. The application also supports CRUD operations (Create, Read, Update, Delete) on various entities present within the application.Security ensures that these operations can only be performed when the user is logged in and their data is present in the database. Furthermore, the only endpoint accessible without authorization is the ADD-client endpoint.
 
 ## Class Explanation:
 ### Ticket Entity:
@@ -36,6 +36,9 @@ The purpose of this application is to allow end-users to purchase tickets for sp
 ## Valuation Entity:
 - Add a review for a specific movie if it has been purchased by the user.
 - Retrieve all the reviews available.
+
+##  Role:
+- Add authority from each user in the application
 
 This application allows users to interact with movie ticketing functionalities, managing customers, movies, cinemas, and valuations. The CRUD operations enable easy management of the entities, and the ability to purchase discounted tickets ensures a flexible and user-friendly experience for the users.
 
