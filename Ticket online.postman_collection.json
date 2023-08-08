@@ -197,7 +197,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Mirko\",\r\n    \"lastName\":\"Francini\",\r\n    \"age\":22,\r\n    \"email\":\"worldez32@gmail.com\",\r\n    \"commecialMessage\":true\r\n}",
+							"raw": "{\r\n    \"name\":\"Mirko\",\r\n    \"lastName\":\"Francini\",\r\n    \"age\":22,\r\n    \"email\":\"worldez32@gmail.com\",\r\n    \"commecialMessage\":true,\r\n    \"username\":\"mmm\",\r\n    \"password\":\"mmm\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -297,7 +297,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"titleMovie\":\"Topolino\",\r\n    \"durationMovie\":\"90\",\r\n    \"releaseMovie\":\"2023-12-05\",\r\n    \"available\":true\r\n}",
+							"raw": "{\r\n    \"titleMovie\": \"Topolino\",\r\n    \"durationMovie\": \"90\",\r\n    \"releaseMovie\": \"2023-12-05\",\r\n    \"available\": true,\r\n    \"cinema\": \r\n        {\r\n            \"idCinema\": 1\r\n        }\r\n    \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -407,7 +407,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"city\":\"Milan\",\r\n    \"seatAvailable\":10\r\n    \r\n}",
+							"raw": "{\r\n    \"city\": \"Milan\",\r\n    \"seatAvailable\": 10\r\n     \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -482,8 +482,23 @@
 			"name": "VALUTATION",
 			"item": [
 				{
-					"name": "GET ALL  valutation",
+					"name": "GET  VALUTATION BY ID MOVIE",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "vvv",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "vvv",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {

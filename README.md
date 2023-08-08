@@ -2,7 +2,7 @@
 exercise of: Online-Ticket-Booking take this exercise from : https://www.java67.com/2022/12/10-projects-ideas-to-learn-spring-boot.html
 # installation 
 I have created a Spring project initialized using Spring Initializr.
-Dependencies used: Spring JPA, Spring Web, MySQL Driver.Framework: Hibernate.
+Dependencies used: Spring JPA, Spring Web, MySQL Driver, Framework: Hibernate.
 
 Make sure you have set up the configuration in the application.properties file to access your database.
 After that, clone the repository from the website or using the following command in your specific folder:
